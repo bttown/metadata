@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net"
 	"runtime"
 	"sync/atomic"
@@ -89,7 +88,6 @@ func (c *Collector) Get(req *Request) error {
 
 // OnFinish registers metadata handler.
 func (c *Collector) OnFinish(handler Handler) {
-	log.Println("set collector handler")
 	c.handler = handler
 }
 
