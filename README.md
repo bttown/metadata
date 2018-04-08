@@ -14,11 +14,11 @@ c := metadata.NewCollector()
 	})
 
 
-    c.GetSync(&metadata.Request{
-        IP:       ip,
-        Port:     port,
-        HashInfo: hashInfo,
-        PeerID:   peerID,
-    })
+c.GetSync(&metadata.Request{
+    IP:       ip,
+    Port:     port,
+    HashInfo: hashInfo,
+    PeerID:   peerID,
+})
 
 ```
