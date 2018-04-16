@@ -3,7 +3,6 @@ package metadata
 import (
 	"errors"
 	"fmt"
-	"log"
 	"time"
 )
 
