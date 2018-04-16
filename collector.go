@@ -106,7 +106,7 @@ func (c *Collector) GetSync(req *Request, then Then, reject Reject) error {
 		return ErrCollectorClosed
 	case <-putTimeout:
 		return errors.New("wait timeout")
-	case <-c.queries:
+	case c.queries <- query:
 	}
 
 	query.wait()
