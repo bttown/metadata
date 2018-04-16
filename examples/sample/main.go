@@ -21,5 +21,5 @@ func main() {
 		PeerID:   peerID,
 	}
 
-	c.GetSync(&req)
+	c.GetSync(&req, nil, nil)
 }

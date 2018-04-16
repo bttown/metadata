@@ -41,7 +41,7 @@ func writePacket(conn net.Conn, data []byte) error {
 }
 
 func readPacket(conn net.Conn, buf *bytes.Buffer, size int64) error {
-	conn.SetWriteDeadline(time.Now().Add(readTimeout))
+	conn.SetReadDeadline(time.Now().Add(readTimeout))
 	readLen, err := io.CopyN(buf, conn, size)
 	if err != nil {
 		return err
@@ -98,14 +98,14 @@ func writePacketExt(conn net.Conn, data []byte, bid, eid int) error {
 	return writePacket(conn, packet)
 }
 
-func sendHandshake(conn net.Conn, req *Request) error {
+func sendHandshake(conn net.Conn, query *metadataQuery) error {
 	packet := make([]byte, 68)
 	packet[0] = 19
 	copy(packet[1:20], []byte("BitTorrent protocol"))
 	packet[25] = 0x10
 
-	infohash, _ := hex.DecodeString(req.HashInfo)
-	peerID, _ := hex.DecodeString(req.PeerID)
+	infohash, _ := hex.DecodeString(query.HashInfo)
+	peerID, _ := hex.DecodeString(query.PeerID)
 
 	copy(packet[28:48], infohash)
 	copy(packet[48:68], peerID)
@@ -117,7 +117,7 @@ func recvHandshake(conn net.Conn, buf *bytes.Buffer) error {
 	return readPacket(conn, buf, 68)
 }
 
-func sendHandshakeExt(conn net.Conn, req *Request) error {
+func sendHandshakeExt(conn net.Conn, query *metadataQuery) error {
 	d := map[string]interface{}{
 		"m": map[string]interface{}{
 			"ut_metadata": 0,
