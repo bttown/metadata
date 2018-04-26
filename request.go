@@ -26,9 +26,9 @@ func (req *Request) RemoteAddr() string {
 type metadataQuery struct {
 	*Request
 
-	metadata *Metadata
-	err      error
-	done     chan struct{}
+	result *Torrent
+	err    error
+	done   chan struct{}
 
 	then   Then
 	reject Reject
@@ -58,9 +58,9 @@ func (query *metadataQuery) start(collect *Collector) {
 	}
 
 	if query.err != nil {
-		query.reject(query.Request, query.err)
+		query.reject(*query.Request, query.err)
 	} else {
-		query.then(query.Request, query.metadata)
+		query.then(*query.Request, *query.result)
 	}
 
 	close(query.done)
@@ -170,14 +170,11 @@ getPieces:
 
 		}
 	}
-	p := bytes.Join(pieces, nil)
-	metadata, err := newMetadata(p)
-	if err != nil {
-		query.err = err
-		return
-	}
 
-	query.metadata = &metadata
-	query.err = nil
+	// handle metadata
+	p := bytes.Join(pieces, nil)
+	torrent := new(Torrent)
+	query.err = NewTorrentFromMetadata(p, torrent)
+	query.result = torrent
 	return
 }

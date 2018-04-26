@@ -8,10 +8,8 @@ import (
 	"strconv"
 )
 
-var c = metadata.NewCollector()
-
-func saveTorrentFile(req *metadata.Request, meta *metadata.Metadata) {
-	torrentName := fmt.Sprintf("%s.torrent", meta.Name)
+func saveTorrentFile(req metadata.Request, torrent metadata.Torrent) {
+	torrentName := fmt.Sprintf("%s.torrent", torrent.Info.Name)
 	f, err := os.Create(torrentName)
 	if err != nil {
 		log.Println("fail to create torrent file", err)
@@ -19,10 +17,11 @@ func saveTorrentFile(req *metadata.Request, meta *metadata.Metadata) {
 	}
 	defer f.Close()
 
-	f.Write(meta.Torrent())
+	f.Write(torrent.Bytes())
 }
 
 func main() {
+	var c = metadata.NewCollector()
 	defer c.Close()
 
 	ip, peerID, hashInfo := os.Args[1], os.Args[3], os.Args[4]

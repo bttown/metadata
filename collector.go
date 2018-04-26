@@ -43,12 +43,12 @@ func NewCollector() *Collector {
 		reply:   make(chan struct{}, maxPendingQueries),
 	}
 
-	c.onSuccess = func(req *Request, meta *Metadata) {
+	c.onSuccess = func(req Request, torrent Torrent) {
 		magnetLink := fmt.Sprintf("magnet:?xt=urn:btih:%s", req.HashInfo)
-		log.Println("[collect onMetadata]", magnetLink, meta.Name)
+		log.Println("[collect onMetadata]", magnetLink, torrent.Info.Name)
 	}
 
-	c.onError = func(req *Request, err error) {
+	c.onError = func(req Request, err error) {
 		log.Println("[collect onError]", err.Error())
 	}
 

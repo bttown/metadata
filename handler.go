@@ -2,7 +2,7 @@ package metadata
 
 type (
 	// Then will be called when metadata got.
-	Then func(*Request, *Metadata)
+	Then func(Request, Torrent)
 	// Reject will be called when a error occur.
-	Reject func(*Request, error)
+	Reject func(Request, error)
 )
