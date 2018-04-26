@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - 1.8.x
+  - 1.9.x
+  - master
+
+before_script:
+  - go get -u github.com/IncSW/go-bencode
+
+script: go test ./...
