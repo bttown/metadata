@@ -1,4 +1,6 @@
 # metadata
+[![Build Status](https://travis-ci.org/bttown/metadata.svg?branch=master)](https://travis-ci.org/bttown/metadata)
+
 a high-performance torrents collector.
 
 #### Install
