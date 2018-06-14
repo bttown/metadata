@@ -21,7 +21,7 @@ func saveTorrentFile(req metadata.Request, torrent metadata.Torrent) {
 }
 
 func main() {
-	var c = metadata.NewCollector()
+	var c = metadata.NewCollector(metadata.Options{})
 	defer c.Close()
 
 	ip, peerID, hashInfo := os.Args[1], os.Args[3], os.Args[4]

@@ -17,6 +17,11 @@ var (
 	ErrTooMuchPieces = errors.New("too much peices")
 )
 
+var (
+	defaultMaxPendingQueries = 5000
+	defaultTaskBufferSize    = 5000
+)
+
 // Collector collects metadata.
 type Collector struct {
 	onSuccess Then
@@ -30,16 +35,22 @@ type Collector struct {
 }
 
 // NewCollector creates and return a new metadata collector.
-func NewCollector() *Collector {
-	var (
-		maxPendingQueries = 10000
-		queriesQsize      = 5000
-	)
+func NewCollector(opts Options) *Collector {
+	maxPendingQueries := opts.MaxPendingQueries
+	if maxPendingQueries <= 0 {
+		maxPendingQueries = defaultMaxPendingQueries
+	}
+
+	taskBuffersize := opts.QueriesBufferSize
+	if taskBuffersize <= 0 {
+		taskBuffersize = defaultTaskBufferSize
+	}
+
 	c := Collector{
 		MaxPendingQueries: maxPendingQueries,
 
 		closeQ:  make(chan struct{}),
-		queries: make(chan *metadataQuery, queriesQsize),
+		queries: make(chan *metadataQuery, taskBuffersize),
 		reply:   make(chan struct{}, maxPendingQueries),
 	}
 
